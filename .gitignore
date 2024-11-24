@@ -1,0 +1,8 @@
+.idea/*
+.vscode/*
+build/*
+bin/*
+/.vs
+/external/include
+/out/build
+/images
