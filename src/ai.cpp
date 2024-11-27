@@ -4,9 +4,12 @@
 
 #include "board.hpp"
 
-void AI::think(const Board& board) {
+void AI::think(const Board& board, const std::vector<CornerTile>& blackBase,
+               const std::vector<CornerTile>& whiteBase) {
   assert(!thinking_);
   board_ = board;
+  blackBase_ = blackBase;
+  whiteBase_ = whiteBase;
   found_move_ = false;
   thinking_ = true;
 }
@@ -41,7 +44,7 @@ void AI::run(const std::stop_token& stop_token) {
 }
 
 int AI::search(int depth, int alpha, int beta) {
-  if (depth == 0 || board_.is_in_checkmate() || board_.is_in_draw()) {
+  if (depth == 0 || board_.is_in_checkmate()) {
     return quiesce(alpha, beta);
   }
   int max{-1000000};
@@ -50,23 +53,7 @@ int AI::search(int depth, int alpha, int beta) {
   board_.generate_all_legal_moves(all_legal_moves);
   assert(all_legal_moves.size != 0);
   order_moves(all_legal_moves);
-  for (int i = 0; i < all_legal_moves.size; i++) {
-    const Move& move = all_legal_moves.data[i];
-    board_.make_move(move);
-    const int score{-search(depth - 1, -beta, -alpha)};
-    board_.undo();
-    if (score > max) {
-      max = score;
-      best_move = move;
-    }
-    if (score > alpha) {
-      alpha = score;
-    }
-    if (alpha >= beta) {
-      break;
-    }
-  }
-  best_move_ = best_move;
+  best_move_ = all_legal_moves.data[0];
   return max;
 }
 
@@ -105,9 +92,8 @@ int AI::evaluate() const {
     return -500000;
   }
 
-  if (board_.is_in_draw()) {
-    return 0;
-  }
+  const auto& base_table =
+      (board_.get_turn() == PieceColor::White) ? bBase : wBase;
 
   int score{};
   for (int tile = 0; tile < 64; tile++) {
@@ -115,46 +101,49 @@ int AI::evaluate() const {
       continue;
     }
     const PieceColor color = board_.get_color(tile);
-    const int side{board_.get_turn() == color ? 1 : -1};
-
-#define CASE_PIECE(type, table)                                            \
-  case PieceType::type:                                                    \
-    score += get_piece_value(PieceType::type) * side;                      \
-    score +=                                                               \
-        (table)[color == PieceColor::White                                 \
-                    ? 8 * (7 - get_tile_row(tile)) + get_tile_column(tile) \
-                    : tile] *                                              \
-        side;                                                              \
-    break;
-
-    switch (board_.get_type(tile)) {
-      case PieceType::None:
-        assert(false);
-        break;
-        CASE_PIECE(Pawn, k_pawn_table)
+    if (board_.get_type(tile) == PieceType::Pawn) {
+      // Evaluate based on position in the base table
+      score += base_table[tile];
     }
-#undef CASE_PIECE
   }
   return score;
 }
 
 void AI::order_moves(Moves& moves) const {
+  const auto& base_table =
+      (board_.get_turn() == PieceColor::White) ? bBase : wBase;
   const auto& begin{moves.data.begin()};
-  // clang-format off
-  std::sort(begin, begin + moves.size, [this](const Move& left, const Move& right) {
-    if (!board_.is_empty(left.target) && !board_.is_empty(right.target)) {
-      if (board_.get_type(left.target) != board_.get_type(right.target)) {
-        return get_piece_value(board_.get_type(left.target)) > get_piece_value(board_.get_type(right.target));
-      }
-      if (board_.get_type(left.tile) != board_.get_type(right.tile)) {
-        return get_piece_value(board_.get_type(left.tile)) < get_piece_value(board_.get_type(right.tile));
-      }
-    } else if (!board_.is_empty(left.target)) {
-      return true;
-    } else if (!board_.is_empty(right.target)) {
-      return false;
-    }
-    return get_piece_value(board_.get_type(left.tile)) < get_piece_value(board_.get_type(right.tile));
-  });
-  // clang-format on
+
+  std::sort(begin, begin + moves.size,
+            [this, &base_table](const Move& left, const Move& right) {
+              int left_value_before = base_table[left.tile];
+              int left_value_after = base_table[left.target];
+              int right_value_before = base_table[right.tile];
+              int right_value_after = base_table[right.target];
+
+              // Check if moves decrease value
+              bool left_decreases = left_value_after < left_value_before;
+              bool right_decreases = right_value_after < right_value_before;
+
+              // Prioritize non-decreasing moves over decreasing moves
+              if (left_decreases != right_decreases) {
+                return !left_decreases;  // true for non-decreasing moves, false
+                                         // otherwise
+              }
+
+              // For non-decreasing moves, prioritize:
+              // 1. Lower initial tile value
+              // 2. Higher value improvement
+              if (!left_decreases && !right_decreases) {
+                if (left_value_before != right_value_before) {
+                  return left_value_before < right_value_before;
+                }
+                return (left_value_after - left_value_before) >
+                       (right_value_after - right_value_before);
+              }
+
+              // For decreasing moves, prioritize minimizing the decrease
+              return (left_value_after - left_value_before) >
+                     (right_value_after - right_value_before);
+            });
 }

@@ -9,6 +9,20 @@ void Board::make_move(Move move) {
                                get_opposite_color(turn_));
   is_in_checkmate_ = is_in_check_ && !has_legal_moves;
   is_in_draw_ = !is_in_check_ && !has_legal_moves;
+  int whiteScore = 0;
+  int blackScore = 0;
+  for (int i = 0; i < 9; i++) {
+    if (get_color(blackBase[i].tile) == PieceColor::White) {
+      whiteScore++;
+    }
+    if (get_color(whiteBase[i].tile) == PieceColor::Black) {
+      blackScore++;
+    }
+    LOGF("SCORES", "White: {} Black: {}", whiteScore, blackScore);
+    if (whiteScore == 9 || blackScore == 9) {
+      is_in_checkmate_ = true;
+    }
+  }
 }
 
 void Board::undo() {
@@ -21,42 +35,11 @@ void Board::undo() {
   set_tile(record.move.tile, get_tile(record.move.target));
 
   int captured_tile{record.move.target};
-  if (moved_type == PieceType::Pawn &&
-      record.enpassant_tile == record.move.target) {
-    captured_tile =
-        record.move.target +
-        (get_color(record.move.target) == PieceColor::White ? -8 : 8);
-    set_tile(record.move.target, {});
-  }
 
   set_tile(captured_tile, record.captured_piece);
 
-  /*if (moved_type == PieceType::King) {
-    if (glm::abs(record.move.target - record.move.tile) == 2) {
-      set_tile(
-          record.move.tile + (record.move.tile < record.move.target ? 3 : -4),
-          make_piece(
-              record.move.target < 8 ? PieceColor::White : PieceColor::Black,
-              PieceType::Rook));
-      set_tile((record.move.tile + record.move.target) / 2, {});
-    }
-    king_tiles_[get_color_index(get_color(record.move.tile))] =
-        record.move.tile;
-  }*/
-
-  if (record.promotion != PieceType::None) {
-    set_tile(record.move.tile,
-             make_piece(
-                 record.move.target < 8 ? PieceColor::Black : PieceColor::White,
-                 PieceType::Pawn));
-  }
-
   turn_ = get_opposite_color(turn_);
-  castling_rights_ = record.castling_rights;
-  enpassant_tile_ = record.enpassant_tile;
-  is_in_check_ = record.is_in_check_;
   is_in_checkmate_ = record.is_in_checkmate_;
-  is_in_draw_ = record.is_in_draw_;
 
   records_.pop_back();
 }
@@ -106,14 +89,33 @@ uint64_t Board::perft(int depth) {
 }
 
 void Board::load_fen(std::string_view fen) {
+  blackBase.clear();
+  blackBase.push_back(CornerTile(54, false));
+  blackBase.push_back(CornerTile(48, false));
+  blackBase.push_back(CornerTile(49, false));
+  blackBase.push_back(CornerTile(55, false));
+  blackBase.push_back(CornerTile(40, false));
+  blackBase.push_back(CornerTile(41, false));
+  blackBase.push_back(CornerTile(42, false));
+  blackBase.push_back(CornerTile(50, false));
+  blackBase.push_back(CornerTile(56, false));
+
+  whiteBase.clear();
+  whiteBase.push_back(CornerTile(7, false));
+  whiteBase.push_back(CornerTile(6, false));
+  whiteBase.push_back(CornerTile(14, false));
+  whiteBase.push_back(CornerTile(15, false));
+  whiteBase.push_back(CornerTile(5, false));
+  whiteBase.push_back(CornerTile(13, false));
+  whiteBase.push_back(CornerTile(21, false));
+  whiteBase.push_back(CornerTile(22, false));
+  whiteBase.push_back(CornerTile(23, false));
+
   turn_ = {};
-  castling_rights_ = {};
   king_tiles_ = {};
   enpassant_tile_ = -1;
   tiles_ = {};
-  is_in_check_ = false;
   is_in_checkmate_ = false;
-  is_in_draw_ = false;
   records_ = {};
 
   std::array<std::string_view, 6> parts{};
@@ -165,29 +167,7 @@ void Board::load_fen(std::string_view fen) {
     turn_ = PieceColor::Black;
   }
 
-  auto set_castling_right = [this](int index, CastlingRight right) {
-    castling_rights_[index] = static_cast<CastlingRight>(
-        to_underlying(castling_rights_[index]) | to_underlying(right));
-  };
 
-  for (const char ch : parts[2]) {
-    switch (ch) {
-      case 'K':
-        set_castling_right(1, CastlingRight::Short);
-        break;
-      case 'k':
-        set_castling_right(0, CastlingRight::Short);
-        break;
-      case 'Q':
-        set_castling_right(1, CastlingRight::Long);
-        break;
-      case 'q':
-        set_castling_right(0, CastlingRight::Long);
-        break;
-      default:
-        break;
-    }
-  }
 
   if (parts[3] != "-") {
     enpassant_tile_ = 8 * (parts[3][1] - '0' - 1) + (parts[3][0] - 'a');
@@ -199,45 +179,14 @@ void Board::move(Move move) {
          get_type(move.tile) != PieceType::None);
 
   const MoveRecord& record{records_.emplace_back(
-      move, move.promotion, get_tile(move.target), castling_rights_,
-      enpassant_tile_, is_in_check_, is_in_checkmate_, is_in_draw_)};
+      move, get_tile(move.target)/*,
+      enpassant_tile_, is_in_check_*/, is_in_checkmate_)};
   set_tile(move.target, get_tile(move.tile));
   set_tile(move.tile, {});
 
   turn_ = get_opposite_color(turn_);
   enpassant_tile_ = -1;
 
-  auto clear_castling_rights = [this](int tile, PieceColor color) {
-    auto clear_castling_right = [this](int color_index, CastlingRight right) {
-      castling_rights_[color_index] = static_cast<CastlingRight>(
-          to_underlying(castling_rights_[color_index]) & ~to_underlying(right));
-    };
-
-    switch (tile) {
-      case 0:
-        if (color == PieceColor::White) {
-          clear_castling_right(1, CastlingRight::Long);
-        }
-        break;
-      case 7:
-        if (color == PieceColor::White) {
-          clear_castling_right(1, CastlingRight::Short);
-        }
-        break;
-      case 56:
-        if (color == PieceColor::Black) {
-          clear_castling_right(0, CastlingRight::Long);
-        }
-        break;
-      case 63:
-        if (color == PieceColor::Black) {
-          clear_castling_right(0, CastlingRight::Short);
-        }
-        break;
-      default:
-        break;
-    }
-  };
 
   const uint8_t color_index{get_color_index(get_color(move.target))};
 
@@ -245,15 +194,6 @@ void Board::move(Move move) {
     case PieceType::Pawn:
       if (glm::abs(move.target - move.tile) == 16) {
         enpassant_tile_ = (move.tile + move.target) / 2;
-      } else if (move.target == record.enpassant_tile) {
-        const int captured_tile{
-            move.target +
-            (get_color(move.target) == PieceColor::White ? -8 : 8)};
-        records_.back().captured_piece = get_tile(captured_tile);
-        set_tile(captured_tile, {});
-      } else if (move.promotion != PieceType::None) {
-        set_tile(move.target,
-                 make_piece(get_color(move.target), move.promotion));
       }
       break;
     default:

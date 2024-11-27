@@ -1,6 +1,7 @@
 #pragma once
 
 #include "piece.hpp"
+#include "vector"
 
 constexpr bool is_valid_tile(int tile) { return 0 <= tile && tile <= 63; }
 
@@ -17,7 +18,7 @@ constexpr int get_tile_column(int tile) {
 struct Move {
   int tile{-1};
   int target{-1};
-  PieceType promotion{};
+  //PieceType promotion{};
 };
 
 struct Moves {
@@ -25,27 +26,28 @@ struct Moves {
   std::array<Move, 256> data{};
 };
 
+struct CornerTile {
+  CornerTile(const int& tile, const bool occupied) {
+    this->tile = tile;
+    this->occupied = occupied;
+  }
+  int tile;
+  bool occupied;
+};
+
 class Board {
-  enum class CastlingRight : uint8_t { None, Short = 1, Long = 2, Both = 3 };
-
-  using CastlingRights = std::array<CastlingRight, 2>;
-
   struct MoveRecord {
     Move move;
-    PieceType promotion{};
     Piece captured_piece{};
-    CastlingRights castling_rights{};
-    int enpassant_tile{};
-    bool is_in_check_{};
     bool is_in_checkmate_{};
-    bool is_in_draw_{};
   };
 
   using Records = std::vector<MoveRecord>;
 
   static constexpr std::string_view k_initial_fen{
-      // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"}; // Original chess 
-      "ppp5/ppp5/ppp5/8/8/5PPP/5PPP/5PPP w KQkq - 0 1"}; // Corner pawns
+      // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"}; //
+      // Original chess
+      "ppp5/ppp5/ppp5/8/8/5PPP/5PPP/5PPP w KQkq - 0 1"};  // Corner pawns
 
  public:
   Board();
@@ -94,8 +96,11 @@ class Board {
   void generate_moves(Moves& moves, int tile) const;
   [[nodiscard]] bool is_threatened(int tile, PieceColor attacker_color) const;
 
+  std::vector<CornerTile> blackBase;
+  std::vector<CornerTile> whiteBase;
+
+
   PieceColor turn_{};
-  CastlingRights castling_rights_{};
   std::array<int, 2> king_tiles_{};
   int enpassant_tile_{-1};
   std::array<Piece, 64> tiles_{};

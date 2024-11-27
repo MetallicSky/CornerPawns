@@ -1,0 +1,35 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 10
+  },
+  "configurePresets": [
+    {
+      "name": "x64-Debug",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/x64-Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/x64-Debug",
+        "CMAKE_TOOLCHAIN_FILE": "C:/Users/metla/source/tools/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "glfw3_DIR": "C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3",
+        "glm_DIR": "C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glm"
+      }
+    },
+    {
+      "name": "x64-Release",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/x64-Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/x64-Release",
+        "CMAKE_TOOLCHAIN_FILE": "C:/Users/metla/source/tools/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "glfw3_DIR": "C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3",
+        "glm_DIR": "C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glm"
+      }
+    }
+  ]
+}

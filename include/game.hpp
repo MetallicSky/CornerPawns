@@ -68,16 +68,18 @@ class Game {
   [[nodiscard]] bool is_selectable_tile(int tile) const;
 
   Board board_;
+  std::vector<CornerTile> blackBase_;
+  std::vector<CornerTile> whiteBase_;
   Moves selectable_tiles_;
   int selected_tile_{-1};
 
   struct ActiveMove {
-    int tile{-1};
-    int target{-1};
-    glm::vec3 position{};
-    float angle{180.0F};
-    bool is_undo{};
-    bool is_completed{};
+    int tile = -1;
+    int target = -1;
+    glm::vec3 position;
+    float angle = 180.0F;
+    bool is_undo;
+    bool is_completed;
   };
 
   void process_active_move();
@@ -90,6 +92,7 @@ class Game {
 
   AI ai_;
   PieceColor ai_color_{};
+
 
   bool game_over_{};
 

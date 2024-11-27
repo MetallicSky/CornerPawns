@@ -305,7 +305,7 @@ void Game::process_active_move() {
         return;
       }
 
-      ai_.think(board_);
+      ai_.think(board_, blackBase_, whiteBase_);
     }
     return;
   }
@@ -319,7 +319,7 @@ void Game::process_active_move() {
       }
     } else {
       PieceType promotion{};
-      board_.make_move({active_move_.tile, active_move_.target, promotion});
+      board_.make_move({active_move_.tile, active_move_.target});
     }
     active_move_.angle = 0.0F;
     active_move_.is_completed = true;
@@ -411,7 +411,7 @@ void Game::mouse_button_callback(GLFWwindow* window, int button, int action,
         if (game->board_.get_records().empty() && !game->ai_.is_thinking()) {
           game->ai_color_ = get_opposite_color(game->board_.get_color(tile));
           if (game->ai_color_ == PieceColor::White) {
-            game->ai_.think(game->board_);
+            game->ai_.think(game->board_, game->blackBase_, game->whiteBase_);
             game->disable_cursor();
           }
           game->set_camera_target_position(

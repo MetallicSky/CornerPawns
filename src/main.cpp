@@ -9,6 +9,7 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
+
 GLFWwindow* glfw_init();
 void glfw_destroy();
 

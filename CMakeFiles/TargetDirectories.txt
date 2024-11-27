@@ -1,0 +1,3 @@
+C:/Users/metla/source/repos/CornerPawns/CMakeFiles/CornerPawns.dir
+C:/Users/metla/source/repos/CornerPawns/CMakeFiles/ALL_BUILD.dir
+C:/Users/metla/source/repos/CornerPawns/CMakeFiles/ZERO_CHECK.dir

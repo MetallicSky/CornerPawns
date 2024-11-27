@@ -1,0 +1,41 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeCXXInformation.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeDependentOption.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeGenericSystem.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeRCInformation.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CheckCXXSourceCompiles.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/CheckLibraryExists.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Compiler/MSVC.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/FindOpenGL.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/FindPackageMessage.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/FindThreads.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Platform/Windows-Initialize.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Platform/Windows.cmake
+C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.29/Modules/Platform/WindowsPaths.cmake
+C:/Users/metla/source/repos/CornerPawns/CMakeFiles/3.29.5-msvc4/CMakeCXXCompiler.cmake
+C:/Users/metla/source/repos/CornerPawns/CMakeFiles/3.29.5-msvc4/CMakeRCCompiler.cmake
+C:/Users/metla/source/repos/CornerPawns/CMakeFiles/3.29.5-msvc4/CMakeSystem.cmake
+C:/Users/metla/source/repos/CornerPawns/CMakeLists.txt
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3/glfw3Config.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3/glfw3ConfigVersion.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-debug.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-release.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glm/glmConfig-debug.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glm/glmConfig-release.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glm/glmConfig.cmake
+C:/Users/metla/source/tools/vcpkg/installed/x64-windows/share/glm/glmConfigVersion.cmake
+C:/Users/metla/source/tools/vcpkg/scripts/buildsystems/vcpkg.cmake

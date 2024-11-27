@@ -3,6 +3,5 @@
 build/*
 bin/*
 /.vs
-/external/include
 /out/build
-/images
+bin/resources/*
