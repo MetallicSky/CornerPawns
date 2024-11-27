@@ -4,6 +4,8 @@ In the honor of [Qt Chess](https://github.com/MetallicSky/Chess) -  Corner Pawns
 
 Your objective is to move all 9 pieces into the opposite corner. Quite simple, eh?
 
+[Latest release can be downloaded here](https://github.com/MetallicSky/CornerPawns/releases)
+
 Features:
 1. Written using OpenGL
 2. You can pick side before game starts. As in chess, white starts first
