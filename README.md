@@ -19,3 +19,11 @@ Features:
 ![presentation3](https://github.com/user-attachments/assets/078b258d-4634-450e-89ba-b34bd280a358)
 
 GLFW and GLM Must be present for building project. These can be installed using vcpkg
+```
+git clone https://github.com/MetallicSky/CornerPawns.git &&
+cd cornerPawns &&
+mkdir build &&
+cd build &&
+cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. &&
+make
+```
