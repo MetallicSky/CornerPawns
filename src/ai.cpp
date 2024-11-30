@@ -1,7 +1,5 @@
 #include "ai.hpp"
 
-#include <chrono>
-
 #include "board.hpp"
 
 void AI::think(const Board& board, const std::vector<CornerTile>& blackBase,

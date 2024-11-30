@@ -1,9 +1,12 @@
 #pragma once
 
 #include <mutex>
+#include <chrono>
+#include <iostream>
 
 #include "piece.hpp"
 #include "vector"
+
 
 constexpr bool is_valid_tile(int tile) { return 0 <= tile && tile <= 63; }
 
@@ -89,6 +92,21 @@ class Board {
   // clang-format on
   [[nodiscard]] const Records& get_records() const { return records_; }
 
+  Board& operator=(const Board& other) {
+    if (this != &other) {  // Avoid self-assignment
+      this->blackBase = other.blackBase;
+      this->whiteBase = other.whiteBase;
+      this->turn_ = other.turn_;
+      this->king_tiles_ = other.king_tiles_;
+      this->tiles_ = other.tiles_;
+      this->is_in_check_ = other.is_in_check_;
+      this->is_in_checkmate_ = other.is_in_checkmate_;
+      this->is_in_draw_ = other.is_in_draw_;
+      this->records_ = other.records_;
+      // Repeat for all members...
+    }
+    return *this;
+  }
  private:
   void set_tile(int tile, Piece piece) { tiles_[tile] = piece; }
 
@@ -100,7 +118,7 @@ class Board {
 
   std::vector<CornerTile> blackBase;
   std::vector<CornerTile> whiteBase;
-
+  mutable std::mutex score_mutex_;
 
   PieceColor turn_{};
   std::array<int, 2> king_tiles_{};

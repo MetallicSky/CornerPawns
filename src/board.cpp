@@ -9,8 +9,13 @@ void Board::make_move(Move move) {
                                get_opposite_color(turn_));
   is_in_checkmate_ = is_in_check_ && !has_legal_moves;
   is_in_draw_ = !is_in_check_ && !has_legal_moves;
+
   int whiteScore = 0;
   int blackScore = 0;
+
+  {
+    std::lock_guard<std::mutex> lock(score_mutex_);  // Lock the mutex
+
     for (int i = 0; i < 9; i++) {
       if (get_color(blackBase[i].tile) == PieceColor::White) {
         whiteScore++;
@@ -18,11 +23,15 @@ void Board::make_move(Move move) {
       if (get_color(whiteBase[i].tile) == PieceColor::Black) {
         blackScore++;
       }
-    LOGF("SCORES", "White: {} Black: {}", whiteScore, blackScore);
+    }
+
+    std::cout << "SCORES: White: " << whiteScore << " Black: " << blackScore
+              << "\n";
+
     if (whiteScore == 9 || blackScore == 9) {
       is_in_checkmate_ = true;
     }
-  }
+  }  // Mutex unlocks here
 }
 
 void Board::undo() {
