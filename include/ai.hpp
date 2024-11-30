@@ -44,9 +44,7 @@ class AI {
  private:
   void run(const std::stop_token& stop_token);
 
-  int search(int depth, int alpha, int beta);
-  int quiesce(int alpha, int beta);
-  int evaluate() const;
+  void search();
 
   void order_moves(Moves& moves) const;
 

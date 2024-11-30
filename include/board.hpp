@@ -62,7 +62,6 @@ class Board {
   void generate_all_legal_moves(Moves& moves, bool only_captures = false);
   void generate_legal_moves(Moves& moves, int tile, bool only_captures = false);
 
-  [[nodiscard]] bool is_in_check() const { return is_in_check_; }
   [[nodiscard]] bool is_in_checkmate() const { return is_in_checkmate_; }
 
   uint64_t perft(int depth);
@@ -95,11 +94,8 @@ class Board {
       this->blackBase = other.blackBase;
       this->whiteBase = other.whiteBase;
       this->turn_ = other.turn_;
-      this->king_tiles_ = other.king_tiles_;
       this->tiles_ = other.tiles_;
-      this->is_in_check_ = other.is_in_check_;
       this->is_in_checkmate_ = other.is_in_checkmate_;
-      this->is_in_draw_ = other.is_in_draw_;
       this->records_ = other.records_;
       // Repeat for all members...
     }
@@ -112,18 +108,13 @@ class Board {
   bool has_legal_moves();
 
   void generate_moves(Moves& moves, int tile) const;
-  [[nodiscard]] bool is_threatened(int tile, PieceColor attacker_color) const;
 
   std::vector<CornerTile> blackBase;
   std::vector<CornerTile> whiteBase;
   mutable std::mutex score_mutex_;
 
   PieceColor turn_{};
-  std::array<int, 2> king_tiles_{};
-  int enpassant_tile_{-1};
   std::array<Piece, 64> tiles_{};
-  bool is_in_check_{};
   bool is_in_checkmate_{};
-  bool is_in_draw_{};
   Records records_;
 };

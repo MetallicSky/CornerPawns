@@ -22,18 +22,7 @@ void AI::run(const std::stop_token& stop_token) {
   while (!stop_token.stop_requested()) {
     std::this_thread::sleep_for(1s);
     if (thinking_ && !found_move_) {
-      auto start{std::chrono::high_resolution_clock::now()};
-      int score{-1000000};
-      for (int i = 1;; i++) {
-        score = std::max(score, search(i, -1000000, 1000000));
-        auto now{std::chrono::high_resolution_clock::now()};
-        auto ms{
-            std::chrono::duration_cast<std::chrono::milliseconds>(now - start)};
-        LOGF("AI", "Depth: {} Time: {}ms", i, ms.count());
-        if (score >= 100000 || ms.count() > 500) {
-          break;
-        }
-      }
+      search();
       thinking_ = false;
       found_move_ = true;
     }
@@ -41,70 +30,13 @@ void AI::run(const std::stop_token& stop_token) {
   LOG("AI", "Thread stopped");
 }
 
-int AI::search(int depth, int alpha, int beta) {
-  if (depth == 0 || board_.is_in_checkmate()) {
-    return quiesce(alpha, beta);
-  }
-  int max{-1000000};
+void AI::search() {
   Move best_move;
   Moves all_legal_moves;
   board_.generate_all_legal_moves(all_legal_moves);
   assert(all_legal_moves.size != 0);
   order_moves(all_legal_moves);
   best_move_ = all_legal_moves.data[0];
-  return max;
-}
-
-int AI::quiesce(int alpha, int beta) {
-  int score{evaluate()};
-
-  if (score >= beta) {
-    return beta;
-  }
-  if (alpha < score) {
-    alpha = score;
-  }
-
-  Moves all_legal_moves;
-  board_.generate_all_legal_moves(all_legal_moves, true);
-  order_moves(all_legal_moves);
-  for (int i = 0; i < all_legal_moves.size; i++) {
-    const Move& move = all_legal_moves.data[i];
-    board_.make_move(move);
-    score = -quiesce(-beta, -alpha);
-    board_.undo();
-
-    if (score >= beta) {
-      return beta;
-    }
-    if (score > alpha) {
-      alpha = score;
-    }
-  }
-
-  return alpha;
-}
-
-int AI::evaluate() const {
-  if (board_.is_in_checkmate()) {
-    return -500000;
-  }
-
-  const auto& base_table =
-      (board_.get_turn() == PieceColor::White) ? bBase : wBase;
-
-  int score{};
-  for (int tile = 0; tile < 64; tile++) {
-    if (board_.is_empty(tile)) {
-      continue;
-    }
-    const PieceColor color = board_.get_color(tile);
-    if (board_.get_type(tile) == PieceType::Pawn) {
-      // Evaluate based on position in the base table
-      score += base_table[tile];
-    }
-  }
-  return score;
 }
 
 void AI::order_moves(Moves& moves) const {

@@ -167,7 +167,7 @@ void Game::draw_picking_texture() {
 
 void Game::draw_pieces() {
   bool is_in_check{};
-  if (board_.is_in_checkmate() || board_.is_in_check()) {
+  if (board_.is_in_checkmate()) {
     is_in_check = true;
   }
 

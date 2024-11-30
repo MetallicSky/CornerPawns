@@ -5,10 +5,7 @@ Board::Board() { load_fen(); }
 void Board::make_move(Move move) {
   this->move(move);
   const bool has_legal_moves{this->has_legal_moves()};
-  is_in_check_ = is_threatened(king_tiles_[get_color_index(turn_)],
-                               get_opposite_color(turn_));
-  is_in_checkmate_ = is_in_check_ && !has_legal_moves;
-  is_in_draw_ = !is_in_check_ && !has_legal_moves;
+  is_in_checkmate_ = !has_legal_moves;
 
   int whiteScore = 0;
   int blackScore = 0;
@@ -63,16 +60,12 @@ void Board::generate_legal_moves(Moves& moves, int tile, bool only_captures) {
   if (turn_ != get_color(tile)) {
     return;
   }
-  auto check_king = [this] {
-    return is_threatened(
-        king_tiles_[get_color_index(get_opposite_color(turn_))], turn_);
-  };
   int end{moves.size};
   generate_moves(moves, tile);
   for (int i = end; i < moves.size; i++) {
     const bool captured{!is_empty(moves.data[i].target)};
     move(moves.data[i]);
-    if (!check_king() && (!only_captures || (only_captures && captured))) {
+    if (!only_captures || (only_captures && captured)) {
       moves.data[end++] = moves.data[i];
     }
     undo();
@@ -121,8 +114,6 @@ void Board::load_fen(std::string_view fen) {
   whiteBase.push_back(CornerTile(23, false));
 
   turn_ = {};
-  king_tiles_ = {};
-  enpassant_tile_ = -1;
   tiles_ = {};
   is_in_checkmate_ = false;
   records_ = {};
@@ -175,12 +166,6 @@ void Board::load_fen(std::string_view fen) {
   } else if (parts[1] == "b") {
     turn_ = PieceColor::Black;
   }
-
-
-
-  if (parts[3] != "-") {
-    enpassant_tile_ = 8 * (parts[3][1] - '0' - 1) + (parts[3][0] - 'a');
-  }
 }
 
 void Board::move(Move move) {
@@ -193,20 +178,6 @@ void Board::move(Move move) {
   set_tile(move.tile, {});
 
   turn_ = get_opposite_color(turn_);
-  enpassant_tile_ = -1;
-
-
-  const uint8_t color_index{get_color_index(get_color(move.target))};
-
-  switch (get_type(move.target)) {
-    case PieceType::Pawn:
-      if (glm::abs(move.target - move.tile) == 16) {
-        enpassant_tile_ = (move.tile + move.target) / 2;
-      }
-      break;
-    default:
-      break;
-  }
 }
 
 bool Board::has_legal_moves() {
@@ -287,11 +258,4 @@ void Board::generate_moves(Moves& moves, int tile) const {
 
 #undef CHECK_MOVE_OFFSET
 #undef CHECK_MOVE_DIRECTION
-}
-
-bool Board::is_threatened(int tile, PieceColor attacker_color) const {
-  const int row{get_tile_row(tile)};
-  const int col{get_tile_column(tile)};
-
-  return false;
 }
