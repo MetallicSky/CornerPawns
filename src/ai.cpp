@@ -15,6 +15,7 @@ void AI::think(const Board& board, const std::vector<CornerTile>& blackBase,
 Move AI::get_best_move() {
   assert(found_move_);
   found_move_ = false;
+  LOGF("AI", "moving from tile {} to tile {}", best_move_.tile, best_move_.target);
   return best_move_;
 }
 
