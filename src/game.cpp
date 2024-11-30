@@ -290,10 +290,7 @@ void Game::process_active_move() {
       LOGF("GAME", "{} won!",
            board_.get_turn() == PieceColor::White ? "Black" : "White");
     }
-    if (board_.is_in_draw()) {
-      LOG("GAME", "Draw!");
-    }
-    if (board_.is_in_checkmate() || board_.is_in_draw()) {
+    if (board_.is_in_checkmate()) {
       enable_cursor();
       game_over_ = true;
       return;

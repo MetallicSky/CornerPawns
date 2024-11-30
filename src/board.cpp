@@ -188,8 +188,7 @@ void Board::move(Move move) {
          get_type(move.tile) != PieceType::None);
 
   const MoveRecord& record{records_.emplace_back(
-      move, get_tile(move.target)/*,
-      enpassant_tile_, is_in_check_*/, is_in_checkmate_)};
+      move, get_tile(move.target), is_in_checkmate_)};
   set_tile(move.target, get_tile(move.tile));
   set_tile(move.tile, {});
 

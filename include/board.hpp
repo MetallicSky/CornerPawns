@@ -23,7 +23,6 @@ constexpr int get_tile_column(int tile) {
 struct Move {
   int tile{-1};
   int target{-1};
-  //PieceType promotion{};
 };
 
 struct Moves {
@@ -65,7 +64,6 @@ class Board {
 
   [[nodiscard]] bool is_in_check() const { return is_in_check_; }
   [[nodiscard]] bool is_in_checkmate() const { return is_in_checkmate_; }
-  [[nodiscard]] bool is_in_draw() const { return is_in_draw_; }
 
   uint64_t perft(int depth);
 
