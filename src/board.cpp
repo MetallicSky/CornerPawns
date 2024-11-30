@@ -11,13 +11,13 @@ void Board::make_move(Move move) {
   is_in_draw_ = !is_in_check_ && !has_legal_moves;
   int whiteScore = 0;
   int blackScore = 0;
-  for (int i = 0; i < 9; i++) {
-    if (get_color(blackBase[i].tile) == PieceColor::White) {
-      whiteScore++;
-    }
-    if (get_color(whiteBase[i].tile) == PieceColor::Black) {
-      blackScore++;
-    }
+    for (int i = 0; i < 9; i++) {
+      if (get_color(blackBase[i].tile) == PieceColor::White) {
+        whiteScore++;
+      }
+      if (get_color(whiteBase[i].tile) == PieceColor::Black) {
+        blackScore++;
+      }
     LOGF("SCORES", "White: {} Black: {}", whiteScore, blackScore);
     if (whiteScore == 9 || blackScore == 9) {
       is_in_checkmate_ = true;
@@ -90,15 +90,15 @@ uint64_t Board::perft(int depth) {
 
 void Board::load_fen(std::string_view fen) {
   blackBase.clear();
-  blackBase.push_back(CornerTile(54, false));
+  blackBase.push_back(CornerTile(56, false));
   blackBase.push_back(CornerTile(48, false));
   blackBase.push_back(CornerTile(49, false));
-  blackBase.push_back(CornerTile(55, false));
+  blackBase.push_back(CornerTile(57, false));
   blackBase.push_back(CornerTile(40, false));
   blackBase.push_back(CornerTile(41, false));
   blackBase.push_back(CornerTile(42, false));
   blackBase.push_back(CornerTile(50, false));
-  blackBase.push_back(CornerTile(56, false));
+  blackBase.push_back(CornerTile(58, false));
 
   whiteBase.clear();
   whiteBase.push_back(CornerTile(7, false));
